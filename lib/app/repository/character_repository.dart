@@ -39,11 +39,13 @@ class CharacterRepository {
   Future<List<CharacterModel>> searchChararcter(String busca) async {
     List<CharacterModel> characters = [];
     bool carregar = true;
-    int pageId = 9;
-    String _url = 'https://swapi.dev/api/people/?search=$busca';
+    int pageId = 1;
+    String _url = 'http://swapi.dev/api/people/?search=$busca&page=$pageId';
 
     while(carregar){
       var resposta = await http.get(_url);
+      print(_url);
+      print('pagina: $pageId');
       var json = jsonDecode(resposta.body);
       List list = json['results'];
 
@@ -53,7 +55,9 @@ class CharacterRepository {
         final character = CharacterModel.fromJson(json);
         characters.add(character);
       }
+      print(json['next']);
       pageId++;
+      _url = 'http://swapi.dev/api/people/?search=$busca&page=$pageId';
       if (pageId > 10){
         carregar = false;
         print('pageid: $pageId');

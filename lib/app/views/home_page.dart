@@ -41,6 +41,13 @@ class _HomePageState extends State<HomePage> {
         child: Text('fetch'),),
         ) : Column(
           children: [
+            
+            Padding(
+              padding: const EdgeInsets.only(top: 28.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Image.asset('assets/logo.png')),
+            ),
             SearchWidget(),
             Expanded(
               flex: 4,

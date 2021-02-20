@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:starwiki/app/repository/character_repository.dart';
+import 'package:starwiki/app/views/searchCharacterDetailsPage.dart';
 
 class SearchWidget extends StatelessWidget {
   final TextEditingController _searchControler =TextEditingController();
   @override
   Widget build(BuildContext context) {
+    CharacterRepository characterRepository = CharacterRepository();
     return Expanded(
       flex: 1,
       child: Padding(
@@ -21,8 +24,11 @@ class SearchWidget extends StatelessWidget {
                     hintText: 'Pesquisar'),
               ),
             ),
-            IconButton(icon: Icon(Icons.search), onPressed: () {
-              
+            IconButton(icon: Icon(Icons.search), onPressed: () async {
+              if (_searchControler.text.isNotEmpty || _searchControler.text != ''){
+                final characters = await characterRepository.searchChararcter(_searchControler.text);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchDetailsPage(characters: characters,)));
+              }
             }),
           ],
         )),

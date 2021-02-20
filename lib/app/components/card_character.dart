@@ -13,6 +13,14 @@ class CardCharacter extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => CharacterDetailsPage(characterModel: characterModel,)));
       },
       child: Card(
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(40),
+          topRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+          topLeft: Radius.circular(20),
+          ),
+          ),
         elevation: 10,
         color: Colors.grey[700],
         child: Padding(
