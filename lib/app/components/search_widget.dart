@@ -3,7 +3,9 @@ import 'package:starwiki/app/repository/character_repository.dart';
 import 'package:starwiki/app/views/searchCharacterDetailsPage.dart';
 
 class SearchWidget extends StatelessWidget {
-  final TextEditingController _searchControler =TextEditingController();
+  final Function f;
+  final TextEditingController searchControler;
+  const SearchWidget({Key key, this.searchControler, this.f}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     CharacterRepository characterRepository = CharacterRepository();
@@ -16,7 +18,7 @@ class SearchWidget extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
-                controller:  _searchControler,
+                controller:  searchControler,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
@@ -24,12 +26,7 @@ class SearchWidget extends StatelessWidget {
                     hintText: 'Pesquisar'),
               ),
             ),
-            IconButton(icon: Icon(Icons.search), onPressed: () async {
-              if (_searchControler.text.isNotEmpty || _searchControler.text != ''){
-                final characters = await characterRepository.searchChararcter(_searchControler.text);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchDetailsPage(characters: characters,)));
-              }
-            }),
+            IconButton(icon: Icon(Icons.search), onPressed: f),
           ],
         )),
       ),

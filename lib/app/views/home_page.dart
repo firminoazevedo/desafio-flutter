@@ -4,6 +4,7 @@ import 'package:starwiki/app/components/search_widget.dart';
 import 'package:starwiki/app/models/character_model.dart';
 import 'package:starwiki/app/repository/character_repository.dart';
 import 'package:starwiki/app/views/fav_page.dart';
+import 'package:starwiki/app/views/searchCharacterDetailsPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController searchControler =TextEditingController();
   int pageId = 9;
   bool loadMore = true;
   List<CharacterModel> characters = [];
@@ -23,9 +25,18 @@ class _HomePageState extends State<HomePage> {
       loadMore = false;
     }
     characters.addAll(newCharacter);
-    setState(() {
-      
-    });
+    setState((){});
+  }
+
+  _search() async{
+    if (searchControler.text.isNotEmpty || searchControler.text != ''){
+      carregado = false;
+      setState((){});
+      final characters = await characterRepository.searchChararcter(searchControler.text);
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchDetailsPage(characters: characters,)));
+      carregado = true;
+      setState((){});
+    }
   }
 
   @override
@@ -64,15 +75,7 @@ class _HomePageState extends State<HomePage> {
             Text('Carregando Dados ...')
           ],
         ))
-        
-        /*RaisedButton(onPressed: () async{
-          characters = await characterRepository.fetchChararcter();
-          setState(() {
-            //carregado = !carregado;
-          });
-        },
-        child: Text('fetch'),),
-        )*/ : Stack(
+        : Stack(
           alignment: Alignment.center,
           children: [
             Image.asset('assets/bg.png'),
@@ -84,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Image.asset('assets/logo.png')),
                 ),
-                SearchWidget(),
+                SearchWidget(searchControler: searchControler, f: _search,),
                 Expanded(
                   flex: 4,
                   child: Padding(
@@ -110,33 +113,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            /*Positioned(
-              bottom: 0,
-              child: loadMore ? CircularProgressIndicator() : Container(),),*/
           ],
         )
-        
-        
-        
-        /*ListView.builder(
-        itemCount: characters.length,
-        itemBuilder: (BuildContext context, int i) {
-          return GestureDetector(
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CharacterDetailsPage(characterModel: characters[i],)));
-            },
-            child: Column(
-              children: [
-                Text('' + characters[i].name),
-                Text('' + characters[i].height),
-                Text('' + characters[i].gender),
-                Text('' + characters[i].mass),
-                Divider(),
-              ],
-            ),
-          );
-        },
-      ),*/
     );
   }
 }
