@@ -8,7 +8,7 @@ class CharacterRepository {
   Future<List<CharacterModel>> fetchChararcter() async {
     List<CharacterModel> characters = [];
     bool carregar = true;
-    int pageId = 9;
+    int pageId = 8;
     String _url = 'http://swapi.dev/api/people/?page=';
 
     while(carregar){
@@ -32,6 +32,27 @@ class CharacterRepository {
         print(json['next']);
       }
     }  
+    return characters;
+  }
+
+  Future<List<CharacterModel>> fetchChararcterByPage(int pageId) async {
+    List<CharacterModel> characters = [];
+    String _url = 'http://swapi.dev/api/people/?page=';
+    var resposta = await http.get(_url + '$pageId');
+    var json = jsonDecode(resposta.body);
+
+    if(json['detail'] != 'Not found'){
+      List list = json['results'];
+      for (var json in list){
+        json['planetName'] = await carregarNomePlaneta(json['homeworld']);
+        json['specieName'] = await carregarNomeDaEspecie(json['species'].toString());
+        final character = CharacterModel.fromJson(json);
+        print(character.name);
+        characters.add(character);
+      } 
+    } else {
+        print('deeeetais');
+      }
     return characters;
   }
 
