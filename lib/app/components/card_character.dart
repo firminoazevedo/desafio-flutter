@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:starwiki/app/models/character_model.dart';
+import 'package:starwiki/app/repository/db_util.dart';
 import 'package:starwiki/app/views/character_details.dart';
 
 class CardCharacter extends StatelessWidget {
@@ -34,7 +35,20 @@ class CardCharacter extends StatelessWidget {
                     height: 50,
                     decoration: BoxDecoration(
                         color: Colors.grey[800], shape: BoxShape.rectangle),
-                    child: Center(child: Text(characterModel.name)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(characterModel.name),
+                        IconButton(icon: Icon(
+                          characterModel.isFav ? Icons.favorite :
+                          Icons.favorite_border,
+                          color: Colors.amber,
+                        ), onPressed: (){
+                          DBUtil.isFavDB('characters', characterModel.url, !characterModel.isFav);
+                        })
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(

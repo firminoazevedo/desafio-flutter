@@ -1,17 +1,18 @@
 class CharacterModel {
-  String name;
-  String height;
-  String mass;
-  String hairColor;
-  String skinColor;
-  String eyeColor;
-  String birthYear;
-  String gender;
-  String homeworld;
-  String planetName;
-  String specieName;
-  bool isFav = false;
-  List<String> species;
+  String name = '';
+  String height = '';
+  String mass = '';
+  String hairColor = '';
+  String skinColor = '';
+  String eyeColor = '';
+  String birthYear = '';
+  String gender = '';
+  String homeworld = '';
+  ///String planetName = '';
+  //String specieName = '';
+  String url = '';
+  bool isFav = true;
+  //List<String> species;
 
   CharacterModel(
       {this.name,
@@ -23,9 +24,12 @@ class CharacterModel {
       this.birthYear,
       this.gender,
       this.homeworld,
-      this.planetName,
-      this.specieName,
-      this.species});
+      this.isFav,
+      //this.planetName,
+      //this.specieName,
+      this.url,
+      //this.species
+      });
 
   CharacterModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -37,9 +41,10 @@ class CharacterModel {
     birthYear = json['birth_year'];
     gender = json['gender'];
     homeworld = json['homeworld'];
-    planetName = json['planetName'];
-    specieName = json['specieName'];
-    species = json['species'].cast<String>();
+    //planetName = json['planetName'] ?? '';
+    //specieName = json['specieName'] ?? '';
+    url = json['url'];
+    //species = json['species'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -53,7 +58,11 @@ class CharacterModel {
     data['birth_year'] = this.birthYear;
     data['gender'] = this.gender;
     data['homeworld'] = this.homeworld;
-    data['species'] = this.species;
+    data['isFav'] = this.isFav;
+    //data['planetName'] = this.planetName;
+    //data['specieName'] = this.specieName;
+    //data['species'] = this.species;
+    data['url'] = this.url;
     return data;
   }
 }

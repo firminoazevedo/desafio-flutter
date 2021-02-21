@@ -9,6 +9,7 @@ class CharacterController {
     characters = await repository.fetchChararcter();
   }
 
+  // ignore: missing_return
   Future<CharacterModel> search(){
     repository.fetchChararcter();
   }

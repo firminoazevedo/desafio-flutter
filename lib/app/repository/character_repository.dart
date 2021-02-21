@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:starwiki/app/models/character_model.dart';
+import 'package:starwiki/app/repository/db_util.dart';
 
 class CharacterRepository {
 
@@ -44,11 +45,26 @@ class CharacterRepository {
     if(json['detail'] != 'Not found'){
       List list = json['results'];
       for (var json in list){
-        json['planetName'] = await carregarNomePlaneta(json['homeworld']);
-        json['specieName'] = await carregarNomeDaEspecie(json['species'].toString());
+        //json['planetName'] = await carregarNomePlaneta(json['homeworld']);
+        //json['specieName'] = await carregarNomeDaEspecie(json['species'].toString());
         final character = CharacterModel.fromJson(json);
-        print(character.name);
         characters.add(character);
+        DBUtil.insert('characters', {
+          'url': character.url,
+          'name': character.name,
+          'height': character.mass,
+          'mass': character.hairColor,
+          'hair_color': character.hairColor,
+          'skin_color': character.skinColor,
+          'eye_color': character.eyeColor,
+          'birthYear': character.birthYear,
+          'Homeworld': character.homeworld,
+          'gender': character.gender,
+          //'planetName': character.planetName,
+          //'specieName': character.specieName,
+          //'species': null,
+          'isFav': character.isFav,
+        });
       } 
     } else {
         print('deeeetais');

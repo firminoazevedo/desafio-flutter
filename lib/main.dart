@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:starwiki/app/views/fav_page.dart';
 import 'package:starwiki/app/views/home_page.dart';
 
 main() {
