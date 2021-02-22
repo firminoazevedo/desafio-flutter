@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:starwiki/app/components/card_character.dart';
+import 'package:starwiki/app/components/loading_widget.dart';
 import 'package:starwiki/app/components/search_widget.dart';
 import 'package:starwiki/app/models/character_model.dart';
 import 'package:starwiki/app/repository/character_repository.dart';
 import 'package:starwiki/app/repository/db_util.dart';
 import 'package:starwiki/app/views/fav_page.dart';
-import 'package:starwiki/app/views/searchCharacterDetailsPage.dart';
+import 'package:starwiki/app/views/search_Character_Details_Page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -72,12 +73,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState(){
-    super.initState();
     _carregarDados().then((_){
       setState(() {
         carregado = true;
       });
     });
+    super.initState();
   }
 
   @override
@@ -98,15 +99,7 @@ class _HomePageState extends State<HomePage> {
         )],
       ),
       body: !carregado ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 10,),
-            Text('Carregando Dados ...')
-          ],
-        ))
+        child: LoadingWidget())
         : Stack(
           alignment: Alignment.center,
           children: [
@@ -125,22 +118,22 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: GridView.builder(
-                    itemCount: characters.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    ),
-                    itemBuilder: (BuildContext context, int index){ 
-                    if(index >= characters.length-1 && loadMore){
-                      pageId++;
-                      _carregarDados();
-                      return Padding(
-                        padding: const EdgeInsets.all(55.0),
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    
-                    return CardCharacter(characterModel: characters[index],);
-                },),
+                      itemCount: characters.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      ),
+                      itemBuilder: (BuildContext context, int index){ 
+                      if(index >= characters.length-1 && loadMore){
+                        pageId++;
+                        _carregarDados();
+                        return Padding(
+                          padding: const EdgeInsets.all(55.0),
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return CardCharacter(characterModel: characters[index],);
+                  },
+                ),
                   ),
                 ),
               ],

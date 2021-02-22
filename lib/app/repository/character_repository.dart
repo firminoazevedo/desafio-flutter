@@ -37,6 +37,7 @@ class CharacterRepository {
   }
 
   Future<List<CharacterModel>> fetchChararcterByPage(int pageId) async {
+    print(fetchChararcterByPage);
     List<CharacterModel> characters = [];
     String _url = 'http://swapi.dev/api/people/?page=';
     var resposta = await http.get(_url + '$pageId');

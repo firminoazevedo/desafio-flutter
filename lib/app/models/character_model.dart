@@ -1,4 +1,6 @@
-class CharacterModel {
+import 'package:flutter/material.dart';
+
+class CharacterModel with ChangeNotifier {
   String name = '';
   String height = '';
   String mass = '';
@@ -64,5 +66,9 @@ class CharacterModel {
     //data['species'] = this.species;
     data['url'] = this.url;
     return data;
+  }
+  void toggleIsFav(){
+    isFav = !isFav;
+    notifyListeners();
   }
 }

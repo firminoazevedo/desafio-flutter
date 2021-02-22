@@ -14,16 +14,17 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(title: Text('Resultados da busca'),),
-      body: GridView.builder(
-        itemCount: widget.characters.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: GridView.builder(
+          itemCount: widget.characters.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            return CardCharacter(characterModel: widget.characters[index],);
+          },
         ),
-        itemBuilder: (BuildContext context, int index) {
-          return CardCharacter(
-            characterModel: widget.characters[index],
-          );
-        },
       ),
     );
   }

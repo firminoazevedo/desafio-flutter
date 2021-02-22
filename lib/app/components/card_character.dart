@@ -3,15 +3,22 @@ import 'package:starwiki/app/models/character_model.dart';
 import 'package:starwiki/app/repository/db_util.dart';
 import 'package:starwiki/app/views/character_details.dart';
 
-class CardCharacter extends StatelessWidget {
+class CardCharacter extends StatefulWidget {
   final CharacterModel characterModel;
 
   const CardCharacter({Key key, this.characterModel}) : super(key: key);
+
+  @override
+  _CardCharacterState createState() => _CardCharacterState();
+}
+
+class _CardCharacterState extends State<CardCharacter> {
   @override
   Widget build(BuildContext context) {
+    //final CharacterModel characterModel = Provider.of<CharacterModel>(context);
     return GestureDetector(
       onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => CharacterDetailsPage(characterModel: characterModel,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => CharacterDetailsPage(characterModel: widget.characterModel,)));
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -39,13 +46,15 @@ class CardCharacter extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(characterModel.name),
+                        Text(widget.characterModel.name),
                         IconButton(icon: Icon(
-                          characterModel.isFav ? Icons.favorite :
+                          widget.characterModel.isFav ? Icons.favorite :
                           Icons.favorite_border,
                           color: Colors.amber,
                         ), onPressed: (){
-                          DBUtil.favoriteUpdate('characters', characterModel.url, !characterModel.isFav);
+                          DBUtil.favoriteUpdate('characters', widget.characterModel.url, !widget.characterModel.isFav);
+                          widget.characterModel.toggleIsFav();
+                          setState(() {});
                         })
                       ],
                     ),
@@ -57,9 +66,9 @@ class CardCharacter extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Height: ' + characterModel.height),
-                        Text('Mass: ' + characterModel.mass),
-                        Text('Gender: ' + characterModel.gender),
+                        Text('Height: ' + widget.characterModel.height),
+                        Text('Mass: ' + widget.characterModel.mass),
+                        Text('Gender: ' + widget.characterModel.gender),
                       ],
                       
                     ),
