@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController searchControler =TextEditingController();
   int pageId = 8;
   bool loadMore = true;
@@ -48,7 +49,8 @@ class _HomePageState extends State<HomePage> {
                 isFav: json['isFav'] == 1 ? true : false,
               ))
           .toList();
-          loadMore = false; 
+          loadMore = false;
+          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Verify your internet conection'),));
     }
     
   }
@@ -57,11 +59,15 @@ class _HomePageState extends State<HomePage> {
     if (searchControler.text.isNotEmpty || searchControler.text != ''){
       carregado = false;
       setState((){});
-      final characters = await characterRepository.searchChararcter(searchControler.text);
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchDetailsPage(characters: characters,)));
-      carregado = true;
-      setState((){});
+      try {
+        final characters = await characterRepository.searchChararcter(searchControler.text);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchDetailsPage(characters: characters,)));
+      } catch (e) {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Verify your internet conection'),));
+      }
     }
+    carregado = true;
+    setState((){});
   }
 
   @override
@@ -77,6 +83,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         actions: [ GestureDetector(
           onTap: (){
