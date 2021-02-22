@@ -15,9 +15,10 @@ class _FavPageState extends State<FavPage> {
   List<CharacterModel> characters;
   var db2;
   _loadFromDB() async {
-    var db = await DBUtil.getFavorites('characters');
-    db2 = db;
-    characters = db.map((json) => CharacterModel(
+    var favoritesListFromDB = await DBUtil.getFavorites('characters');
+    db2 = favoritesListFromDB;
+    if(favoritesListFromDB.isNotEmpty)
+    characters = favoritesListFromDB.map((json) => CharacterModel(
               name: json['name'],
               height: json['height'],
               mass: json['mass'],
@@ -53,7 +54,9 @@ class _FavPageState extends State<FavPage> {
         })],
         title: Text('Favoritos'),
       ),
-      body: _loading ? Center(child: CircularProgressIndicator()) : Center(
+      body: _loading ? Center(child: CircularProgressIndicator())
+      : characters == null ? Center(child: Text('Você ainda não adicionou nenhuma favorito'),)
+      : Center(
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: GridView.builder(

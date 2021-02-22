@@ -41,34 +41,33 @@ class CharacterRepository {
     String _url = 'http://swapi.dev/api/people/?page=';
     var resposta = await http.get(_url + '$pageId');
     var json = jsonDecode(resposta.body);
-
-    if(json['detail'] != 'Not found'){
-      List list = json['results'];
-      for (var json in list){
+    if(json['detail'] != 'Not found'){  // json[detail] é retornado quando a pagina não foi encontrada
+      List characterList = json['results']; 
+      for (var characterJson in characterList){
         //json['planetName'] = await carregarNomePlaneta(json['homeworld']);
         //json['specieName'] = await carregarNomeDaEspecie(json['species'].toString());
-        final character = CharacterModel.fromJson(json);
-        characters.add(character);
+        final characterModel = CharacterModel.fromJson(characterJson);
+        bool isFav = await DBUtil.isFavDB('characters', characterModel.url); // Verifica no banco se é favorito
+        characterModel.isFav = isFav;
+        characters.add(characterModel);
         DBUtil.insert('characters', {
-          'url': character.url,
-          'name': character.name,
-          'height': character.mass,
-          'mass': character.hairColor,
-          'hair_color': character.hairColor,
-          'skin_color': character.skinColor,
-          'eye_color': character.eyeColor,
-          'birthYear': character.birthYear,
-          'Homeworld': character.homeworld,
-          'gender': character.gender,
+          'url': characterModel.url,
+          'name': characterModel.name,
+          'height': characterModel.mass,
+          'mass': characterModel.hairColor,
+          'hair_color': characterModel.hairColor,
+          'skin_color': characterModel.skinColor,
+          'eye_color': characterModel.eyeColor,
+          'birthYear': characterModel.birthYear,
+          'Homeworld': characterModel.homeworld,
+          'gender': characterModel.gender,
           //'planetName': character.planetName,
           //'specieName': character.specieName,
           //'species': null,
-          'isFav': character.isFav,
+          'isFav': characterModel.isFav,
         });
       } 
-    } else {
-        print('deeeetais');
-      }
+    }
     return characters;
   }
 

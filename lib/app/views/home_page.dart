@@ -3,6 +3,7 @@ import 'package:starwiki/app/components/card_character.dart';
 import 'package:starwiki/app/components/search_widget.dart';
 import 'package:starwiki/app/models/character_model.dart';
 import 'package:starwiki/app/repository/character_repository.dart';
+import 'package:starwiki/app/repository/db_util.dart';
 import 'package:starwiki/app/views/fav_page.dart';
 import 'package:starwiki/app/views/searchCharacterDetailsPage.dart';
 
@@ -13,19 +14,43 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController searchControler =TextEditingController();
-  int pageId = 9;
+  int pageId = 8;
   bool loadMore = true;
   List<CharacterModel> characters = [];
   bool carregado = false;
   CharacterRepository characterRepository = CharacterRepository();
 
   Future _carregarDados() async{
-    var newCharacter = await characterRepository.fetchChararcterByPage(pageId);
-    if (newCharacter.isEmpty){
-      loadMore = false;
+    try {
+      var newCharacter = await characterRepository.fetchChararcterByPage(pageId);
+      if (newCharacter.isEmpty){
+        loadMore = false; 
+      }
+      characters.addAll(newCharacter);
+      setState((){});      
+    } catch (e) {
+      var favoritesListFromDB = await DBUtil.getData('characters');
+      if(favoritesListFromDB.isNotEmpty)
+      characters = favoritesListFromDB.map((json) => CharacterModel(
+                name: json['name'],
+                height: json['height'],
+                mass: json['mass'],
+                hairColor: json['hair_color'],
+                skinColor: json['skin_color'],
+                eyeColor: json['eye_color'],
+                birthYear: json['birthYear'],
+                gender: json['gender'],
+                homeworld: json['homeworld'],
+                //planetName: json['planetName'],
+                //specieName: json['specieName'],
+                url: json['url'],
+                //species: json['species'] ?? [],
+                isFav: json['isFav'] == 1 ? true : false,
+              ))
+          .toList();
+          loadMore = false; 
     }
-    characters.addAll(newCharacter);
-    setState((){});
+    
   }
 
   _search() async{

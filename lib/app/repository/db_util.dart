@@ -38,10 +38,26 @@ class DBUtil {
     await db.execute("DROP TABLE IF EXISTS $table");
   }
 
-  static Future isFavDB(String table, String url, bool isFav) async {
-    print('isFavDB');
+  static Future deleteAllFromTable(String table) async{
+    final db = await DBUtil.database();
+    await db.execute("DELETE FROM $table");
+  }
+
+  static Future favoriteUpdate(String table, String url, bool isFav) async {
+    print('favoriteUpdate');
     int newFav = isFav ? 1 : 0;
     final db = await DBUtil.database();
     await db.execute("UPDATE $table SET isFav =  ? WHERE url = ?", [newFav, url]);
+  }
+
+  static Future<bool> isFavDB(String table, String url) async {
+    print('isFavDB');
+    final db = await DBUtil.database();
+    List<Map<String, dynamic>> map = await db.rawQuery("SELECT isFav FROM $table WHERE url = ? ", [url]);
+    if (map.isNotEmpty)
+    if (map[0]['isFav'] == 1)
+      return true;
+    return false;
+    
   }
 }

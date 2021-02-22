@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:starwiki/app/repository/character_repository.dart';
-import 'package:starwiki/app/views/searchCharacterDetailsPage.dart';
 
 class SearchWidget extends StatelessWidget {
   final Function f;
@@ -8,7 +6,6 @@ class SearchWidget extends StatelessWidget {
   const SearchWidget({Key key, this.searchControler, this.f}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    CharacterRepository characterRepository = CharacterRepository();
     return Expanded(
       flex: 1,
       child: Padding(

@@ -45,7 +45,7 @@ class CardCharacter extends StatelessWidget {
                           Icons.favorite_border,
                           color: Colors.amber,
                         ), onPressed: (){
-                          DBUtil.isFavDB('characters', characterModel.url, !characterModel.isFav);
+                          DBUtil.favoriteUpdate('characters', characterModel.url, !characterModel.isFav);
                         })
                       ],
                     ),
