@@ -8,12 +8,42 @@ class CharacterController with ChangeNotifier{
   List<CharacterModel> charactersFav = [];
   bool isLoading = true;
   final repository = CharacterRepository();
+  
+  List<CharacterModel> get getCharactersFav => [...charactersFav];
 
   Future start(int pageId) async {
-    var newCharacter = await repository.fetchChararcterByPage(pageId);
-    characters.addAll(newCharacter);
-    isLoading = false;
+    print('start');
+    try {
+      var newCharacter = await repository.fetchChararcterByPage(pageId);
+      characters.addAll(newCharacter);
+    } catch (e) {
+      getCharactersFromBD();
+    }
     notifyListeners();
+  }
+
+  Future getCharactersFromBD() async {
+    var favoritesListFromDB = await DBUtil.getData('characters');
+    if (favoritesListFromDB.isNotEmpty)
+      characters.addAll(favoritesListFromDB
+          .map((json) => CharacterModel(
+                name: json['name'],
+                height: json['height'],
+                mass: json['mass'],
+                hairColor: json['hair_color'],
+                skinColor: json['skin_color'],
+                eyeColor: json['eye_color'],
+                birthYear: json['birthYear'],
+                gender: json['gender'],
+                homeworld: json['homeworld'],
+                //planetName: json['planetName'],
+                //specieName: json['specieName'],
+                url: json['url'],
+                //species: json['species'] ?? [],
+                isFav: json['isFav'] == 1 ? true : false,
+              ))
+          .toList());
+          notifyListeners();
   }
 
   loadFavCharacters() async {
@@ -38,6 +68,18 @@ class CharacterController with ChangeNotifier{
         .toList();
     notifyListeners();
   }
-  List<CharacterModel> get getCharactersFav => [...charactersFav];
+
+  search(String name){
+    if (name.isNotEmpty && name != ''){
+      print(name);
+      characters = characters.where((char) => (char.name.toLowerCase().contains(name.toLowerCase()))).toList();
+      notifyListeners();
+    }
+  }
+
+  Future<List<CharacterModel>> searchOnAPI(String search)async{
+    final charactersSearch = await repository.searchChararcter(search);
+    return charactersSearch;
+  }
 
 }

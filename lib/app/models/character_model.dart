@@ -10,7 +10,7 @@ class CharacterModel with ChangeNotifier {
   String birthYear = '';
   String gender = '';
   String homeworld = '';
-  String planetName = '';
+  String planetName;
   String specieName = '';
   String url = '';
   bool isFav = true;

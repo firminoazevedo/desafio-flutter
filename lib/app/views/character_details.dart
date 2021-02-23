@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:starwiki/app/animation/FadeAnimation.dart';
 import 'package:starwiki/app/components/info_container.dart';
 import 'package:starwiki/app/models/character_model.dart';
 import 'package:starwiki/app/repository/character_repository.dart';
@@ -60,14 +61,17 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
       body: Center(
         child: Column(
           children: [
-            Expanded(
-              flex: 1,
-              child: Center(child: Text('Nome: \n' + widget.characterModel.name ?? '',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.w200,
-              ),))),
+              Expanded(
+                flex: 1,
+                child: FadeAnimation(
+                  1.4,
+                  Center(child: Text('Nome: \n' + widget.characterModel.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w200,
+                  ),)),
+                )),
             Expanded(
               flex: 4,
               child: Padding(
@@ -79,8 +83,8 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                   InfoCard('Cor da Pele: ' + widget.characterModel.skinColor.toString()),
                   InfoCard('Cor dos olhos: ' + widget.characterModel.eyeColor.toString()),
                   InfoCard('Data de Nascimento: ' + widget.characterModel.birthYear.toString()),
-                  InfoCard('Nome do Planeta: ' + widget.characterModel.planetName ?? ''),
-                  InfoCard('Nome da Specie: ' + widget.characterModel.specieName ?? ''),
+                  InfoCard('Nome do Planeta: ' + (widget.characterModel.planetName.isEmpty ? 'Carregando ...' : widget.characterModel.planetName)),
+                  InfoCard('Nome da Specie: ' + (widget.characterModel.specieName.isEmpty ? 'Carregando ...' : widget.characterModel.specieName)),
                 ],),
               ),)
           ],

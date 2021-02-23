@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:starwiki/app/animation/FadeAnimation.dart';
 import 'package:starwiki/app/components/card_character.dart';
 import 'package:starwiki/app/components/loading_widget.dart';
 import 'package:starwiki/app/components/search_widget.dart';
+import 'package:starwiki/app/controllers/character_controller.dart';
 import 'package:starwiki/app/models/character_model.dart';
 import 'package:starwiki/app/repository/character_repository.dart';
 import 'package:starwiki/app/repository/db_util.dart';
@@ -14,16 +17,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController searchControler = TextEditingController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  CharacterController characterController = CharacterController();
+  List<CharacterModel> characters = [];
+  List<CharacterModel> charactersFav;
   int pageId = 8;
   bool loadMore = true;
-  List<CharacterModel> characters = [];
   bool carregado = false;
-  CharacterRepository characterRepository = CharacterRepository();
+  bool favorites = false;
+  
 
-  Future _carregarDados() async {
-    try {
+  Future _carregarDados(context) async {
+    int i = characters.length;
+    await Provider.of<CharacterController>(context, listen: false).start(pageId).then((_){
+      setState(() {
+        carregado = true;
+      });      
+    });
+    if(characters.length == i){
+      loadMore = false;
+    }
+    if (pageId == 1 && characters.isEmpty){
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Verify your internet conection'),
+      ));
+    }
+    }
+    /*try {
       var newCharacter =
           await characterRepository.fetchChararcterByPage(pageId);
       if (newCharacter.isEmpty) {
@@ -32,40 +53,20 @@ class _HomePageState extends State<HomePage> {
       characters.addAll(newCharacter);
       setState(() {});
     } catch (e) {
-      var favoritesListFromDB = await DBUtil.getData('characters');
-      if (favoritesListFromDB.isNotEmpty)
-        characters = favoritesListFromDB
-            .map((json) => CharacterModel(
-                  name: json['name'],
-                  height: json['height'],
-                  mass: json['mass'],
-                  hairColor: json['hair_color'],
-                  skinColor: json['skin_color'],
-                  eyeColor: json['eye_color'],
-                  birthYear: json['birthYear'],
-                  gender: json['gender'],
-                  homeworld: json['homeworld'],
-                  //planetName: json['planetName'],
-                  //specieName: json['specieName'],
-                  url: json['url'],
-                  //species: json['species'] ?? [],
-                  isFav: json['isFav'] == 1 ? true : false,
-                ))
-            .toList();
+      await getCharactersFromBD();
       loadMore = false;
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('Verify your internet conection'),
       ));
     }
-  }
+  }*/
 
   _search() async {
     if (searchControler.text.isNotEmpty || searchControler.text != '') {
       carregado = false;
       setState(() {});
       try {
-        final characters =
-            await characterRepository.searchChararcter(searchControler.text);
+        final characters = await Provider.of<CharacterController>(context).searchOnAPI(searchControler.text);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => SearchDetailsPage(
                   characters: characters,
@@ -82,32 +83,46 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _carregarDados().then((_) {
+    _carregarDados(context).then((_) {
       setState(() {
         carregado = true;
       });
     });
+    
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    characters = Provider.of<CharacterController>(context).characters;
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
           actions: [
             GestureDetector(
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => FavPage()));
+                /*Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => FavPage()));*/
+                if (favorites){
+                  favorites = !favorites;
+                  setState(() {});
+                } else {
+                  print('favorites');
+                  favorites = !favorites;
+                  charactersFav = characters.where((char) => char.isFav == true).toList();
+                  setState(() {});
+                }
               },
               child: Row(
                 children: [
-                  Icon(Icons.favorite_border),
+                  Icon(favorites ? Icons.favorite : Icons.favorite_border),
                   SizedBox(
                     width: 5,
                   ),
-                  Text('Favoritos'),
+                  Text('Favorites', style: TextStyle(
+                    color: favorites ? Colors.amber : Colors.white,
+                    fontWeight : favorites ? FontWeight.w700 : FontWeight.w300,
+                  ),),
                   SizedBox(
                     width: 20,
                   )
@@ -126,9 +141,12 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 38.0),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Image.asset('assets/logo.png')),
+                        child: FadeAnimation(
+                          1.4,
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Image.asset('assets/logo.png')),
+                        ),
                       ),
                       SearchWidget(
                         searchControler: searchControler,
@@ -139,22 +157,22 @@ class _HomePageState extends State<HomePage> {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: GridView.builder(
-                            itemCount: characters.length,
+                            itemCount: favorites ? charactersFav.length : characters.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                             ),
                             itemBuilder: (BuildContext context, int index) {
-                              if (index >= characters.length - 1 && loadMore) {
+                              if (index >= characters.length - 1 && loadMore && !favorites) {
                                 pageId++;
-                                _carregarDados();
+                                _carregarDados(context);
                                 return Padding(
                                   padding: const EdgeInsets.all(55.0),
                                   child: CircularProgressIndicator(),
                                 );
                               }
                               return CardCharacter(
-                                characterModel: characters[index],
+                                characterModel: favorites ? charactersFav[index] : characters[index],
                               );
                             },
                           ),
