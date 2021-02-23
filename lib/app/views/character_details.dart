@@ -20,6 +20,9 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
           .carregarNomePlaneta(
             widget.characterModel.homeworld
           );
+    
+    widget.characterModel.specieName = await CharacterRepository()
+        .carregarNomeDaEspecie(widget.characterModel.species.toString());
     setState(() {});
   }
 
@@ -77,7 +80,7 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                   InfoCard('Cor dos olhos: ' + widget.characterModel.eyeColor.toString()),
                   InfoCard('Data de Nascimento: ' + widget.characterModel.birthYear.toString()),
                   InfoCard('Nome do Planeta: ' + widget.characterModel.planetName ?? ''),
-                  /*InfoCard('Nome da Specie: ' + characterModel.specieName ?? ''),*/
+                  InfoCard('Nome da Specie: ' + widget.characterModel.specieName ?? ''),
                 ],),
               ),)
           ],
