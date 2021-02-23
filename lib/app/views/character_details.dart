@@ -13,6 +13,22 @@ class CharacterDetailsPage extends StatefulWidget {
   _CharacterDetailsPageState createState() => _CharacterDetailsPageState();
 }
 class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
+
+  carregarDados()async {
+    widget.characterModel.planetName
+      = await CharacterRepository()
+          .carregarNomePlaneta(
+            widget.characterModel.homeworld
+          );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    carregarDados();
+    super.initState();
+  }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -60,8 +76,8 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                   InfoCard('Cor da Pele: ' + widget.characterModel.skinColor.toString()),
                   InfoCard('Cor dos olhos: ' + widget.characterModel.eyeColor.toString()),
                   InfoCard('Data de Nascimento: ' + widget.characterModel.birthYear.toString()),
-                  /*InfoCard('Nome do Planeta: ' + characterModel.planetName ?? ''),
-                  InfoCard('Nome da Specie: ' + characterModel.specieName ?? ''),*/
+                  InfoCard('Nome do Planeta: ' + widget.characterModel.planetName ?? ''),
+                  /*InfoCard('Nome da Specie: ' + characterModel.specieName ?? ''),*/
                 ],),
               ),)
           ],

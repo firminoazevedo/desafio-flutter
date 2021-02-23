@@ -48,11 +48,11 @@ class CharacterRepository {
         //json['planetName'] = await carregarNomePlaneta(json['homeworld']);
         //json['specieName'] = await carregarNomeDaEspecie(json['species'].toString());
         final characterModel = CharacterModel.fromJson(characterJson);
-        bool isFav = await DBUtil.isFavDB('characters', characterModel.url); // Verifica no banco se é favorito
-        characterModel.isFav = isFav;
+        //bool isFav = await DBUtil.isFavDB('characters', characterModel.url); // Verifica no banco se é favorito
+        //characterModel.isFav = isFav;
         characters.add(characterModel);
         // Add model to DB
-        DBUtil.insert('characters', {
+        /*DBUtil.insert('characters', {
           'url': characterModel.url,
           'name': characterModel.name,
           'height': characterModel.mass,
@@ -67,7 +67,7 @@ class CharacterRepository {
           //'specieName': character.specieName,
           //'species': null,
           'isFav': characterModel.isFav,
-        });
+        });*/
       } 
     }
     return characters;

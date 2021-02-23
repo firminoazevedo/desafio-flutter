@@ -10,11 +10,11 @@ class CharacterModel with ChangeNotifier {
   String birthYear = '';
   String gender = '';
   String homeworld = '';
-  ///String planetName = '';
+  String planetName = '';
   //String specieName = '';
   String url = '';
   bool isFav = true;
-  //List<String> species;
+  List<String> species;
 
   CharacterModel(
       {this.name,
@@ -30,7 +30,7 @@ class CharacterModel with ChangeNotifier {
       //this.planetName,
       //this.specieName,
       this.url,
-      //this.species
+      this.species
       });
 
   CharacterModel.fromJson(Map<String, dynamic> json) {
@@ -43,10 +43,10 @@ class CharacterModel with ChangeNotifier {
     birthYear = json['birth_year'];
     gender = json['gender'];
     homeworld = json['homeworld'];
-    //planetName = json['planetName'] ?? '';
+    planetName = json['planetName'] ?? '';
     //specieName = json['specieName'] ?? '';
     url = json['url'];
-    //species = json['species'].cast<String>();
+    species = json['species'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
