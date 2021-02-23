@@ -13,8 +13,9 @@ class _SearchDetailsPageState extends State<SearchDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(title: Text('Resultados da busca'),),
-      body: Padding(
+    appBar: AppBar(title: Text('Search Results'),),
+      body: widget.characters.length < 1 ? Center(child: Text('Character not Found'),)
+      : Padding(
         padding: const EdgeInsets.all(12.0),
         child: GridView.builder(
           itemCount: widget.characters.length,

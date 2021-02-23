@@ -58,8 +58,15 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                 DBUtil.favoriteUpdate('characters', widget.characterModel.url, !widget.characterModel.isFav);
                 CharacterRepository characterRepository = CharacterRepository();
                 if(widget.characterModel.isFav == false){
-                  String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(resposta),));
+                  try {
+                    String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(resposta),));
+                    setState(() {});
+                  } catch (e) {
+                    widget.characterModel.toggleIsFav();
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Failed to add to favorites on server'),)); 
+                    setState(() {});                             
+                  }
                 }
                 widget.characterModel.toggleIsFav();
                 setState(() {});

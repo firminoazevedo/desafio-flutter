@@ -66,10 +66,10 @@ class _HomePageState extends State<HomePage> {
       carregado = false;
       setState(() {});
       try {
-        final characters = await Provider.of<CharacterController>(context).searchOnAPI(searchControler.text);
+        List<CharacterModel> characterSearch = await CharacterController().searchOnAPI(searchControler.text);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => SearchDetailsPage(
-                  characters: characters,
+                  characters: characterSearch,
                 )));
       } catch (e) {
         _scaffoldKey.currentState.showSnackBar(SnackBar(

@@ -58,11 +58,16 @@ class _CardCharacterState extends State<CardCharacter> {
                             try {
                               String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
                               Scaffold.of(context).showSnackBar(SnackBar(content: Text(resposta),));
-                              widget.characterModel.toggleIsFav();
                               setState(() {});
                             } catch (e) {
-                              Scaffold.of(context).showSnackBar(SnackBar(content: Text('Failed to add to favorites'),));                              
+                              Scaffold.of(context).showSnackBar(SnackBar(content: Text('Failed to add to favorites on server'),)); 
+                              widget.characterModel.toggleIsFav();
+                              setState(() {});                             
                             }
+                          } else {
+                            Scaffold.of(context).showSnackBar(SnackBar(content: Text('Removed from favorites'),));
+                            widget.characterModel.toggleIsFav();
+                            setState(() {}); 
                           }
                         })
                       ],
