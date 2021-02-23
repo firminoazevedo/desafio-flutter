@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:starwiki/app/models/character_model.dart';
+import 'package:starwiki/app/repository/character_repository.dart';
 import 'package:starwiki/app/repository/db_util.dart';
 import 'package:starwiki/app/views/character_details.dart';
 
 class CardCharacter extends StatefulWidget {
   final CharacterModel characterModel;
-
   const CardCharacter({Key key, this.characterModel}) : super(key: key);
-
   @override
   _CardCharacterState createState() => _CardCharacterState();
 }
@@ -51,8 +50,14 @@ class _CardCharacterState extends State<CardCharacter> {
                           widget.characterModel.isFav ? Icons.favorite :
                           Icons.favorite_border,
                           color: Colors.amber,
-                        ), onPressed: (){
+                        ), onPressed: () async{
+                          // Atualiza um favorito
                           DBUtil.favoriteUpdate('characters', widget.characterModel.url, !widget.characterModel.isFav);
+                          CharacterRepository characterRepository = CharacterRepository();
+                          if(widget.characterModel.isFav == false){
+                            String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
+                            Scaffold.of(context).showSnackBar(SnackBar(content: Text(resposta),));
+                          }
                           widget.characterModel.toggleIsFav();
                           setState(() {});
                         })

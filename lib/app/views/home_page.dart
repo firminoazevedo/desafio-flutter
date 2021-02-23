@@ -93,7 +93,9 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               Icon(Icons.favorite_border),
-              Text('Favoritos')
+              SizedBox(width: 5,),
+              Text('Favoritos'),
+              SizedBox(width: 20,)
             ],
           ),
         )],
