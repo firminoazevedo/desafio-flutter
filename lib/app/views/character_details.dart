@@ -16,14 +16,21 @@ class CharacterDetailsPage extends StatefulWidget {
 class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
 
   carregarDados()async {
-    widget.characterModel.planetName
+    try {
+      widget.characterModel.planetName
       = await CharacterRepository()
           .carregarNomePlaneta(
             widget.characterModel.homeworld
           );
-    
-    widget.characterModel.specieName = await CharacterRepository()
+    } catch (e) {
+      widget.characterModel.planetName = '{Falied to Loading}';
+    }
+    try {
+      widget.characterModel.specieName = await CharacterRepository()
         .carregarNomeDaEspecie(widget.characterModel.species.toString());
+    } catch (e) {
+      widget.characterModel.specieName = '{Falied to Loading}';
+    }
     setState(() {});
   }
 

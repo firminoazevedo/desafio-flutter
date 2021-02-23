@@ -55,11 +55,15 @@ class _CardCharacterState extends State<CardCharacter> {
                           DBUtil.favoriteUpdate('characters', widget.characterModel.url, !widget.characterModel.isFav);
                           CharacterRepository characterRepository = CharacterRepository();
                           if(widget.characterModel.isFav == false){
-                            String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
-                            Scaffold.of(context).showSnackBar(SnackBar(content: Text(resposta),));
+                            try {
+                              String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
+                              Scaffold.of(context).showSnackBar(SnackBar(content: Text(resposta),));
+                              widget.characterModel.toggleIsFav();
+                              setState(() {});
+                            } catch (e) {
+                              Scaffold.of(context).showSnackBar(SnackBar(content: Text('Failed to add to favorites'),));                              
+                            }
                           }
-                          widget.characterModel.toggleIsFav();
-                          setState(() {});
                         })
                       ],
                     ),
