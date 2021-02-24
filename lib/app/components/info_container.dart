@@ -12,7 +12,7 @@ class InfoCard extends StatelessWidget {
           height: 50,
           width: MediaQuery.of(context).size.width * 0.85,
           decoration: BoxDecoration(
-            color: Colors.grey[800],
+            color: Colors.grey[700],
             borderRadius: BorderRadius.circular(25),
           ),
           child: Center(child: Text(info))),

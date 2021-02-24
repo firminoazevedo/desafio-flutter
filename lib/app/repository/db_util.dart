@@ -8,6 +8,7 @@ class DBUtil {
     return sql.openDatabase(
       path.join(dbPath, 'characters.db'),
       onCreate: (db, version) {
+        db.execute('CREATE TABLE IF NOT EXISTS fav_requests (url TEXT PRIMARY KEY, name TEXT)');
         return db.execute('CREATE TABLE IF NOT EXIST characters (url TEXT PRIMARY KEY, name TEXT, height TEXT, mass TEXT, hair_color TEXT, skin_color TEXT, eye_color TEXT, birthYear TEXT, gender TEXT, Homeworld TEXT, planetName TEXT, specieName TEXT, isFav BOOLEAN)');
       },
       version: 1,

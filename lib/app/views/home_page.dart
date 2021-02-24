@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   CharacterController characterController = CharacterController();
   List<CharacterModel> characters = [];
   List<CharacterModel> charactersFav;
-  int pageId = 8;
+  int pageId = 1;
   bool loadMore = true;
   bool carregado = false;
   bool favorites = false;

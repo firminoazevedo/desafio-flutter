@@ -59,7 +59,6 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                 CharacterRepository characterRepository = CharacterRepository();
                 if(widget.characterModel.isFav == false){
                   try {
-                    widget.characterModel.toggleIsFav();
                     setState(() {});
                     String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
                     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(resposta),));
@@ -88,28 +87,31 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
           children: [
               Expanded(
                 flex: 1,
-                child: FadeAnimation(
-                  1.4,
-                  Center(child: Text('Nome: \n' + widget.characterModel.name ?? '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w200,
-                  ),)),
+                child: Container(
+                  child: FadeAnimation(
+                    1.4,
+                    Center(child: Text('Name: \n' + widget.characterModel.name ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w200,
+                    ),)),
+                  ),
                 )),
             Expanded(
               flex: 4,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal:28.0),
                 child: ListView(children: [
-                  InfoCard('Altura: ' + widget.characterModel.height.toString()),
-                  InfoCard('Peso: ' + widget.characterModel.mass.toString()),
-                  InfoCard('Cor do cabelo: ' + widget.characterModel.hairColor.toString()),
-                  InfoCard('Cor da Pele: ' + widget.characterModel.skinColor.toString()),
-                  InfoCard('Cor dos olhos: ' + widget.characterModel.eyeColor.toString()),
-                  InfoCard('Data de Nascimento: ' + widget.characterModel.birthYear.toString()),
-                  InfoCard('Nome do Planeta: ' + (widget.characterModel.planetName.isEmpty ? 'Carregando ...' : widget.characterModel.planetName)),
-                  InfoCard('Nome da Specie: ' + (widget.characterModel.specieName.isEmpty ? 'Carregando ...' : widget.characterModel.specieName)),
+                  InfoCard('Height: ' + widget.characterModel.height.toString()),
+                  InfoCard('Mass: ' + widget.characterModel.mass.toString()),
+                  InfoCard('Hair Color: ' + widget.characterModel.hairColor.toString()),
+                  InfoCard('Skin Color: ' + widget.characterModel.skinColor.toString()),
+                  InfoCard('Eye Color: ' + widget.characterModel.eyeColor.toString()),
+                  InfoCard('Birth Year: ' + widget.characterModel.birthYear.toString()),
+                  InfoCard('Gender: ' + widget.characterModel.gender.toString()),
+                  InfoCard('Planet Name: ' + (widget.characterModel.planetName.isEmpty ? 'Carregando ...' : widget.characterModel.planetName)),
+                  InfoCard('Specie Name: ' + (widget.characterModel.specieName.isEmpty ? 'Carregando ...' : widget.characterModel.specieName)),
                 ],),
               ),)
           ],

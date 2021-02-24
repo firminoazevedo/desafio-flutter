@@ -20,7 +20,7 @@ class SearchWidget extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    hintText: 'Pesquisar'),
+                    hintText: '  Search'),
               ),
             ),
             IconButton(icon: Icon(Icons.search), onPressed: f),

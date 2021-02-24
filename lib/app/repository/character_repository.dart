@@ -127,7 +127,7 @@ class CharacterRepository {
       print(json['name'] + 'nome da especia');
       return json['name'];
     }
-    return 'Sem especie';
+    return 'No Specie';
   }
 
   Future<String> adicionarFavoritosAPI(String id) async{
