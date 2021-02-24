@@ -58,7 +58,7 @@ Em metade das requisições enviadas para a api starwarsfavorites a aplicação 
 
 P.S.: O candidato deve escolher o ID.
 
-![Screenshot](screens/starwiki.jpg)
+![Screenshot](screens/starwiki.jpg) ![Screenshot](screens/starwiki02.jpg) ![Screenshot](screens/starwiki03.jpg)
 
 ---
 #### LICENSE
