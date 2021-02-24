@@ -60,7 +60,7 @@ P.S.: O candidato deve escolher o ID.
 
 <p align="center">
   <img src="screens/starwiki.jpg" width="200" title="hover text">
-  <img src="screens/starwiki02.jpg" width="200" alt="accessibility text">
+  <img src="screens/starwiki002.jpg" width="200" alt="accessibility text">
   <img src="screens/starwiki03.jpg" width="200" alt="accessibility text">
 </p>
 
