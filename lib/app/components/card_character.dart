@@ -45,7 +45,7 @@ class _CardCharacterState extends State<CardCharacter> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(widget.characterModel.name),
+                        Text(widget.characterModel.name, overflow: TextOverflow.fade,),
                         IconButton(icon: Icon(
                           widget.characterModel.isFav ? Icons.favorite :
                           Icons.favorite_border,
