@@ -132,10 +132,10 @@ class CharacterRepository {
 
   Future<String> adicionarFavoritosAPI(String id) async{
     String url = 'http://private-782d3-starwarsfavorites.apiary-mock.com/favorite/';
-    var resposta = await http.post(url+id);
-    var json = jsonDecode(resposta.body);
-    if (resposta.statusCode == 201)
-      return json['message'];
+      var resposta = await http.post(url+id);
+      var json = jsonDecode(resposta.body);
+      if (resposta.statusCode == 201)
+        return json['message'];
     return 'erro ao favoritar';
   }
 }

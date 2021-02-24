@@ -59,14 +59,25 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                 CharacterRepository characterRepository = CharacterRepository();
                 if(widget.characterModel.isFav == false){
                   try {
+                    widget.characterModel.toggleIsFav();
+                    setState(() {});
                     String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
                     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(resposta),));
+                    DBUtil.delete('fav_requests', 'url', [widget.characterModel.url]);
                     setState(() {});
                   } catch (e) {
                     widget.characterModel.toggleIsFav();
-                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Failed to add to favorites on server'),)); 
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Failed to add to favorites on server'),));
+                    DBUtil.insert('fav_requests', { 
+                      'url': widget.characterModel.url,
+                      'name': widget.characterModel.name
+                    });
+                    var db =  await DBUtil.executeSQL('SELECT * FROM fav_requests');
+                    print(db);
                     setState(() {});                             
                   }
+                } else {
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Removed from favorites'),));
                 }
                 widget.characterModel.toggleIsFav();
                 setState(() {});

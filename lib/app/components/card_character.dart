@@ -58,8 +58,14 @@ class _CardCharacterState extends State<CardCharacter> {
                             try {
                               String resposta = await characterRepository.adicionarFavoritosAPI(widget.characterModel.name);
                               Scaffold.of(context).showSnackBar(SnackBar(content: Text(resposta),));
+                              DBUtil.delete('fav_requests', 'url', [widget.characterModel.url]);
+                              widget.characterModel.toggleIsFav();
                               setState(() {});
                             } catch (e) {
+                              DBUtil.insert('fav_requests', { 
+                                'url': widget.characterModel.url,
+                                'name': widget.characterModel.name
+                              });
                               Scaffold.of(context).showSnackBar(SnackBar(content: Text('Failed to add to favorites on server'),)); 
                               widget.characterModel.toggleIsFav();
                               setState(() {});                             
@@ -67,6 +73,7 @@ class _CardCharacterState extends State<CardCharacter> {
                           } else {
                             Scaffold.of(context).showSnackBar(SnackBar(content: Text('Removed from favorites'),));
                             widget.characterModel.toggleIsFav();
+                            print('removede');
                             setState(() {}); 
                           }
                         })

@@ -6,9 +6,6 @@ import 'package:starwiki/app/components/loading_widget.dart';
 import 'package:starwiki/app/components/search_widget.dart';
 import 'package:starwiki/app/controllers/character_controller.dart';
 import 'package:starwiki/app/models/character_model.dart';
-import 'package:starwiki/app/repository/character_repository.dart';
-import 'package:starwiki/app/repository/db_util.dart';
-import 'package:starwiki/app/views/fav_page.dart';
 import 'package:starwiki/app/views/search_Character_Details_Page.dart';
 
 class HomePage extends StatefulWidget {
@@ -83,6 +80,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    Provider.of<CharacterController>(context, listen: false).sendResquestsFailed();
     _carregarDados(context).then((_) {
       setState(() {
         carregado = true;

@@ -82,4 +82,21 @@ class CharacterController with ChangeNotifier{
     return charactersSearch;
   }
 
+  sendResquestsFailed()async{
+    final favRequests = await DBUtil.getData('fav_requests');
+    print(favRequests);
+    favRequests.forEach((e) async {
+      try {
+        final results = await repository.adicionarFavoritosAPI(e['name']);
+        if(results == 'erro ao favoritar'){
+      } else {
+        String url = e['url'];
+        await DBUtil.delete('fav_requests', 'url', ['$url']);
+      }
+      } catch (e) {
+      }
+    });
+    
+  }
+
 }

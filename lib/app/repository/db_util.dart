@@ -8,7 +8,6 @@ class DBUtil {
     return sql.openDatabase(
       path.join(dbPath, 'characters.db'),
       onCreate: (db, version) {
-        // name TEXT, height TEXT, mass TEXT, hairColor TEXT, skinColor TEXT, eyeColor TEXT, birthYear TEXT, gender TEXT, Homeworld TEXT, planetName TEXT, specieName TEXT
         return db.execute('CREATE TABLE IF NOT EXIST characters (url TEXT PRIMARY KEY, name TEXT, height TEXT, mass TEXT, hair_color TEXT, skin_color TEXT, eye_color TEXT, birthYear TEXT, gender TEXT, Homeworld TEXT, planetName TEXT, specieName TEXT, isFav BOOLEAN)');
       },
       version: 1,
@@ -17,9 +16,8 @@ class DBUtil {
   
   static Future<void> insert (String table, Map<String, dynamic> dados) async {
     final db = await DBUtil.database();
-    await db.execute('CREATE TABLE IF NOT EXISTS characters (url TEXT PRIMARY KEY, name TEXT, height TEXT, mass TEXT, hair_color TEXT, skin_color TEXT, eye_color TEXT, birthYear TEXT, gender TEXT, Homeworld TEXT, isFav BOOLEAN)');
+    await db.execute('CREATE TABLE IF NOT EXISTS fav_requests (url TEXT PRIMARY KEY, name TEXT)');
     await db.insert(table, dados, conflictAlgorithm: sql.ConflictAlgorithm.replace);
-
   }
 
   static Future <List<Map<String, dynamic>>> getData(String table) async {
@@ -31,6 +29,12 @@ class DBUtil {
     final db = await DBUtil.database();
     print('getFavorites');
     return db.rawQuery("SELECT * FROM $table WHERE isFav = 1");    
+  }
+
+  static Future<int> delete(String table, String where, List args) async {
+    final db = await DBUtil.database();
+    print('delete');
+    return db.delete(table, where: '$where = ?', whereArgs: args);    
   }
 
   static Future dropTable(String table) async{
@@ -54,10 +58,14 @@ class DBUtil {
     print('isFavDB');
     final db = await DBUtil.database();
     List<Map<String, dynamic>> map = await db.rawQuery("SELECT isFav FROM $table WHERE url = ? ", [url]);
-    if (map.isNotEmpty)
+    if (map.isNotEmpty) // Treatment in case of empty result
     if (map[0]['isFav'] == 1)
       return true;
     return false;
-    
+  }
+
+  static Future<List<Map<String, dynamic>>> executeSQL(String sql) async{
+    final db = await DBUtil.database();
+    return db.rawQuery(sql);
   }
 }
